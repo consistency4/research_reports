@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { textToEmbedding } from "@/lib/embeddings";
+import { parseEmbedding, textToEmbedding } from "@/lib/embeddings";
 import { reduceTo3D } from "@/lib/pca";
 
 const TYPE_COLORS: Record<string, string> = {
@@ -15,6 +15,7 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 export async function GET() {
+  try {
   const [insightsRes, connectionsRes, articlesRes] = await Promise.all([
     supabase.from("insights").select("*").order("created_at"),
     supabase.from("insight_connections").select("*"),
@@ -26,10 +27,14 @@ export async function GET() {
   }
 
   const insights = insightsRes.data ?? [];
+
+  if (insights.length === 0) {
+    return NextResponse.json({ nodes: [], links: [], articles: [] });
+  }
+
   const vectors = insights.map((i) => {
-    if (i.embedding && Array.isArray(i.embedding)) {
-      return i.embedding as number[];
-    }
+    const stored = parseEmbedding(i.embedding);
+    if (stored) return stored;
     return textToEmbedding(`${i.title}\n${i.content}`);
   });
 
@@ -66,4 +71,8 @@ export async function GET() {
     links,
     articles: articlesRes.data ?? [],
   });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to build insight map";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }

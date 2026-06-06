@@ -14,6 +14,27 @@ export function textToEmbedding(text: string, dim = EMBEDDING_DIM): number[] {
   return Array.from(vec, (v) => v / norm);
 }
 
+export function parseEmbedding(value: unknown): number[] | null {
+  if (!value) return null;
+  if (Array.isArray(value)) {
+    return value.every((n) => typeof n === "number") ? (value as number[]) : null;
+  }
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed) && parsed.every((n) => typeof n === "number")) {
+        return parsed;
+      }
+    } catch {
+      const trimmed = value.replace(/^\[/, "").replace(/\]$/, "");
+      if (!trimmed) return null;
+      const nums = trimmed.split(",").map((n) => Number(n.trim()));
+      if (nums.every((n) => !Number.isNaN(n))) return nums;
+    }
+  }
+  return null;
+}
+
 function tokenize(text: string): string[] {
   return text
     .toLowerCase()

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import InsightMap from "@/components/InsightMap";
+import MapClient from "@/components/MapClient";
 
 export default function MapPage() {
   return (
@@ -13,7 +13,7 @@ export default function MapPage() {
         </div>
         <p className="text-xs text-stone-500">PCA projection of insight embeddings</p>
       </nav>
-      <InsightMap />
+      <MapClient />
     </div>
   );
 }
