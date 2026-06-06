@@ -35,3 +35,15 @@ export type SynthesisIdea = {
   novelty_score: number | null;
   created_at: string;
 };
+
+export type BusinessAlignment = {
+  id: string;
+  insight_id: string | null;
+  article_id: string | null;
+  alignment_type: "similarity" | "contrast" | "opportunity";
+  title: string;
+  description: string;
+  business_theme: string | null;
+  relevance_score: number | null;
+  created_at: string;
+};

@@ -1,5 +1,6 @@
 "use client";
 
+import ArticleLink from "@/components/ArticleLink";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html, Line, OrbitControls } from "@react-three/drei";
@@ -29,7 +30,7 @@ type MapLink = {
 type MapData = {
   nodes: MapNode[];
   links: MapLink[];
-  articles: { id: string; title: string | null; journal: string | null }[];
+  articles: { id: string; title: string | null; journal: string | null; doi: string | null }[];
 };
 
 const TYPE_LABELS: Record<string, string> = {
@@ -227,6 +228,12 @@ export default function InsightMap() {
     }));
   }, [data]);
 
+  const articleMap = useMemo(
+    () => new Map((data?.articles ?? []).map((a) => [a.id, a])),
+    [data],
+  );
+  const selectedArticle = selected ? articleMap.get(selected.articleId) : null;
+
   if (loading) {
     return (
       <div className="flex h-[calc(100vh-4rem)] items-center justify-center text-stone-500">
@@ -311,6 +318,15 @@ export default function InsightMap() {
                 )}
               </div>
               <h3 className="mt-3 font-medium text-stone-100">{selected.title}</h3>
+              {selectedArticle && (
+                <ArticleLink
+                  title={selectedArticle.title}
+                  doi={selectedArticle.doi}
+                  journal={selectedArticle.journal}
+                  variant="dark"
+                  className="mt-2"
+                />
+              )}
               <p className="mt-2 text-sm leading-relaxed text-stone-400">
                 {selected.content}
               </p>

@@ -12,6 +12,18 @@ export default function Nav() {
       >
         Insight Map
       </Link>
+      <Link
+        href="/explore"
+        className="text-stone-500 transition-colors hover:text-stone-900"
+      >
+        Explore
+      </Link>
+      <Link
+        href="/chat"
+        className="text-stone-500 transition-colors hover:text-stone-900"
+      >
+        Chat
+      </Link>
     </nav>
   );
 }

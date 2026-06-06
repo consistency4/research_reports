@@ -19,7 +19,7 @@ export async function GET() {
   const [insightsRes, connectionsRes, articlesRes] = await Promise.all([
     supabase.from("insights").select("*").order("created_at"),
     supabase.from("insight_connections").select("*"),
-    supabase.from("articles").select("id, title, journal"),
+    supabase.from("articles").select("id, title, journal, doi"),
   ]);
 
   if (insightsRes.error) {

@@ -9,6 +9,12 @@ export default function MapPage() {
           <Link href="/" className="text-sm font-medium text-stone-400 hover:text-stone-200">
             Knowledge Base
           </Link>
+          <Link href="/explore" className="text-sm font-medium text-stone-400 hover:text-stone-200">
+            Explore
+          </Link>
+          <Link href="/chat" className="text-sm font-medium text-stone-400 hover:text-stone-200">
+            Chat
+          </Link>
           <span className="text-sm font-medium text-stone-100">Insight Map</span>
         </div>
         <p className="text-xs text-stone-500">PCA projection of insight embeddings</p>
